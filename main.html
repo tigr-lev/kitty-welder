@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="ru">  
+<head>
+    <meta charset="UTF-8">
+    <title>Прогнозирование размеров сварного шва</title>
+    <style>
+        body {
+            background-image: url("{{ url_for('static', filename='images/background.jpg') }}");
+            background-size: cover; /* Масштабировать изображение на весь экран */
+            background-position: center; /* Центрирование изображения */
+        }
+
+        form {
+            margin: auto;
+            width: 35%;
+            background-color: rgba(255, 255, 255, 0.8); /* Полупрозрачный фон для формы */
+            padding: 20px;
+            border-radius: 10px;
+        }
+
+        .result {
+            margin: auto;
+            width: 35%;
+            border: 1px solid #ccc;
+            padding: 10px;
+            background-color: rgba(255, 255, 255, 0.8);
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Прогнозирование размеров сварного шва при электронно-лучевой сварке
+тонкостенных конструкций аэрокосмического назначения</h1>
+    
+    <form action="{{ url_for('main') }}" method="POST">  <!-- Корректный URL для обработки формы -->
+        <p>
+            <label for="IW">Величина сварочного тока (IW)</label>
+            <input type="number" name="IW" required>  <!-- Обязательное поле -->
+        </p>
+        <p>
+            <label for="IF">Ток сварки (IF)</label>
+            <input type="number" name="IF" required>  <!-- Обязательное поле -->
+        </p>
+        <p>
+            <label for="VW">Скорость сварки (VW)</label>
+            <input type="number" name="VW" required>  <!-- Обязательное поле -->
+        </p>
+        <p>
+            <label for="FP">Расстояние от образцов до поверхности (FP)</label>
+            <input type="number" name="FP" required>  <!-- Обязательное поле -->
+        </p>
+        <p>
+            <input type="submit" value="Предсказать">  <!-- Текст кнопки -->
+        </p>
+    </form>
+    
+    {% if predicted_width is not none and predicted_depth is not none %}  <!-- Проверка, есть ли результат -->
+    <div class="result" id="result">  <!-- Блок для отображения результата -->
+        <h2>Результаты предсказания:</h2>
+        <p>Предсказанная ширина шва: {{ predicted_width }}</p>  <!-- Отображение предсказанной ширины -->
+        <p>Предсказанная глубина шва: {{ predicted_depth }}</p>  <!-- Отображение предсказанной глубины -->
+    </div>
+    {% endif %}
+    
+    {% if error %}
+    <div class="result" id="error">
+        <p style="color: red;">Ошибка: {{ error }}</p>  <!-- Отображение ошибки -->
+    </div>
+    {% endif %}
+</body>
+</html>
